@@ -14,7 +14,7 @@ spec:
       - name: demo-registry
       containers:
       - name: ftp-server
-        image: harbor.epei360.com/library/ftp-server:v1.0
+        image: harbor.mydomain.com/library/ftp-server:v1.0
         imagePullPolicy: Always
         ports:
           - name: ftp
