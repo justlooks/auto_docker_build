@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ftpserver-deployment
+  namespace: demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        base-app: ftp-server
+    spec:
+      imagePullSecrets:
+      - name: demo-registry
+      containers:
+      - name: ftp-server
+        image: harbor.epei360.com/library/ftp-server:v1.0
+        imagePullPolicy: Always
+        ports:
+          - name: ftp
+            containerPort: 21
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - mountPath: /var/lib/ftp
+            name: ftpserverpvc
+      volumes:
+        - name: ftpserverpvc
+          persistentVolumeClaim:
+            claimName: nfs-ftp-pvc
