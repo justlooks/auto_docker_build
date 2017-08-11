@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: ftpserver-deployment
+  name: ftp-server
   namespace: demo
 spec:
   replicas: 1
@@ -14,13 +14,11 @@ spec:
       - name: demo-registry
       containers:
       - name: ftp-server
-        image: harbor.mydomain.com/library/ftp-server:v1.0
+        image: harbor.myrepo.com/library/ftp-server:v1.0
         imagePullPolicy: Always
         ports:
           - name: ftp
             containerPort: 21
-        securityContext:
-          privileged: true
         volumeMounts:
           - mountPath: /var/lib/ftp
             name: ftpserverpvc

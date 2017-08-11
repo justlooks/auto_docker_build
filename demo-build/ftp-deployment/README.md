@@ -22,3 +22,8 @@ check if ok
 # kubectl apply -f ftpwithpv-deploy.yml
 确认创建ok
 # kubectl get deploy --namespace demo
+
+创建服务
+# kubectl apply -f ftpwithpv-svc.yml
+确认创建ok
+# kubectl get svc --namespace demo

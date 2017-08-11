@@ -116,3 +116,14 @@ spec:
         - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
 
 # kubectl apply -f nginx-ingress-controller.yaml
+
+======================================================
+
+创建tls认证
+
+自签名证书和私钥
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginxsvc/O=nginxsvc"
+创建服务器的screte
+# kubectl create secret tls tls-secret --key tls.key --cert tls.crt
+
+
