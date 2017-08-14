@@ -20,7 +20,7 @@ spec:
           - name: ftp
             containerPort: 21
         volumeMounts:
-          - mountPath: /var/lib/ftp
+          - mountPath: /var/ftp/pub
             name: ftpserverpvc
       volumes:
         - name: ftpserverpvc
