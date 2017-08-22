@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-svc-ingress
+  namespace: demo
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: ingress.epei360.com
+    http:
+      paths:
+      - path: /tomcat
+        backend:
+          serviceName: tomcat-server
+          servicePort: 80

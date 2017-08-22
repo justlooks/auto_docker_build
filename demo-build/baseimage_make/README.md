@@ -39,3 +39,6 @@ lib64/libpthread.so.0
 
 
 docker exec -it 46cb621eb360 redis-cli -a xZ7ScgiMV1Acv3h4 info
+
+reference
+http://william-yeh.github.io/docker-mini/#117

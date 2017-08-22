@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    base-app: tomcat-server
+  namespace: demo
+  name: tomcat-server
+spec:
+  ports:
+  - port: 80
+    name: http
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    base-app: tomcat-server
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: tomcat-server
+  namespace: demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        base-app: tomcat-server
+    spec:
+      imagePullSecrets:
+      - name: demo-registry
+      containers:
+      - name: tomcat-server
+        image: harbor.myrepo.com/library/tomcat:v7.0.81
+        imagePullPolicy: Always
+        ports:
+          - name: tomcat
+            containerPort: 8080
+        volumeMounts:
+          - mountPath: /opt/apache-tomcat-7.0.81/webapps/
+            name: tomcatpub
+      volumes:
+        - name: tomcatpub
+          emptyDir: {}
+      initContainers:
+      - name: init-myservice
+        image: harbor.myrepo.com/library/busybox_curl:v1.0
+        command: ['sh', '-c', 'curl ftp://ftp-server.demo/tomcat/dwrdemo.war --user foo:foo123 -o /tmp/dwrdemo.war']
+        volumeMounts:
+          - mountPath: /tmp
+            name: tomcatpub
+      volumes:
+        - name: tomcatpub
+          emptyDir: {}

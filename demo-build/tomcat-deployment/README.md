@@ -1,0 +1,1 @@
+deploy文件生成一个service和一个deployment，deployment会启动一个pod，pod中初始化时会由一个初始化container来从ftp服务器上拉取一个war包，然后启动tomcat服务，开启8080端口,让外界访问这个war包内容，另外附带一个ingress rule内容，将集群内部的内容开放给外部使用
