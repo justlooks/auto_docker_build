@@ -1,0 +1,98 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysql-server
+  namespace: demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: mysql-server
+      labels:
+        base-app: mysql-server
+    spec:
+      imagePullSecrets:
+      - name: harbor-secret
+      containers:
+      - name: mysql-server
+        image: harbor.epei360.com/library/mysql:v5.7.19
+        imagePullPolicy: Always
+        ports:
+          - name: mysql
+            containerPort: 3306
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: MYSQL_ROOT_PASSWORD
+            value: "Ts8Kud)"
+          - name: MYSQL_USER
+            value: "mysql-exporter"
+          - name: MYSQL_PASSWORD
+            value: "123456"
+        volumeMounts:
+          - name: mysqldatadir
+            mountPath: /var/lib/mysql
+          - name: config-tz
+            mountPath: /etc/localtime
+      - name: mysqld-exporter
+        image: harbor.epei360.com/library/mysqld-exporter:v1.0
+        imagePullPolicy: Always
+        ports:
+          - name: mysql-exporter
+            containerPort: 9104
+        env:
+        - name: DATA_SOURCE_NAME
+          value: 'mysql-exporter:123456@(127.0.0.1:3306)/'
+        - name: DATADIR
+          value: '/var/lib/mysql'
+        volumeMounts:
+          - name: mysqldatadir
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: mysqldatadir
+          emptyDir: {}
+        - name: controldir
+          emptyDir: {}
+        - name: config-tz
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    base-app: mysql-server
+  namespace: demo
+  name: mysql-server
+spec:
+  ports:
+  - port: 3306
+    name: http
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    base-app: mysql-server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    base-app: mysql-server-exporter
+  namespace: demo
+  name: mysql-server-exporter
+spec:
+  ports:
+  - port: 9090
+    name: http
+    protocol: TCP
+    targetPort: 9104
+  selector:
+    base-app: mysql-server
