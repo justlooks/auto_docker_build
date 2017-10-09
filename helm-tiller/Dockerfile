@@ -1,2 +1,2 @@
-FROM gcr.io/kubernetes-helm/tiller:v2.6.0
+FROM gcr.io/kubernetes-helm/tiller:v2.6.2
 MAINTAINER alex <justlooks@gmail.com>
