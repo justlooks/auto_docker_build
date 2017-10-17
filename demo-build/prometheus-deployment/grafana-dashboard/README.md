@@ -1,0 +1,1 @@
+mysql-overview.json 中Process States和Top Process States Hourly无图的原因是社区版mysql没有mysql_info_schema_threads这个监控选项
