@@ -4146,7 +4146,7 @@
                 "multi": false,
                 "multiFormat": "regex values",
                 "name": "host",
-                "query": "label_values(mysql_up, instance)",
+                "query": "label_values(mysql_up, alias)",
                 "refresh": 1,
                 "refresh_on_load": false,
                 "regex": "",
